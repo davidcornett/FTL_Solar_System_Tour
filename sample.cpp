@@ -177,7 +177,7 @@ const GLfloat FOGEND      = 4.f;
 //#define DEMO_Z_FIGHTING
 //#define DEMO_DEPTH_BUFFER
 
-
+#define NUM_STARS 100
 
 #define SPEED_INCR_STEP .005
 #define SPEED_DECR_STEP .005
@@ -479,16 +479,6 @@ Display()
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, MulArray3(.3f, White));
 	glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
 
-	/*
-	// Set light properties 
-	glLightfv(GL_LIGHT0, GL_AMBIENT, sun_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, sun_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, sun_specular);
-	glLightfv(GL_LIGHT0, GL_POSITION, sun_pos);
-	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.);
-	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.);
-	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.);
-	*/
 	glEnable(GL_LIGHTING);
 	glEnable(GL_LIGHT0);
 	//SetMaterial(.44, .5, .56, 100.);
@@ -558,7 +548,7 @@ Display()
 
 	// DRAW STARS -----------------------------------------------------------------------------------------
 
-	DrawStars(100);
+	DrawStars(NUM_STARS);
 
 
 	// DRAW SUN AND PLANETS -------------------------------------------------------------------------------
@@ -1127,11 +1117,6 @@ Keyboard( unsigned char c, int x, int y )
 		case 'S':
 		case 's':
 			DecreaseVelocity();
-			break;
-	
-		case 'o':
-		case 'O':
-			WhichProjection = ORTHO;
 			break;
 
 		case 'p':
@@ -1787,40 +1772,34 @@ DrawSun(struct Solar_System_Obj planet)
 
 	// CREATE LIGHT SOURCES - 1 center pt and 4 diameter pt lights will represent sun's size
 	
-	// SUN CENTER LIGHT
+	// SUN CENTER and PERIMETER LIGHTS
 	glTranslatef(-50, 0., -1.);
 	SetSunLight(GL_LIGHT0, 0., 0., 0., 1., 1., 1.);
 
 	glDisable(GL_LIGHTING);
 	glColor3f(1., 0., 0.);
 	glTranslatef(planet.distance_scaled, 0., 0.);
-	//OsuSphere(.2, 30, 30);
 	
 	glPushMatrix();
 	glTranslatef(0, 0., -planet.radius_scaled);
 	SetSunLight(GL_LIGHT2, 0., 0., -planet.radius_scaled, 1., 1., 1.);
-	//OsuSphere(.2, 30, 30);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0, 0., planet.radius_scaled);
-	//OsuSphere(.2, 30, 30);
 	SetSunLight(GL_LIGHT3, 0., 0., planet.radius_scaled, 1., 1., 1.);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0, -planet.radius_scaled, 0.);
 	SetSunLight(GL_LIGHT4, 0., -planet.radius_scaled, 0., 1., 1., 1.);
-	//OsuSphere(.2, 30, 30);
 	glPopMatrix();
 
 	glPushMatrix();
 	glTranslatef(0, planet.radius_scaled, 0.);
 	SetSunLight(GL_LIGHT5, 0., planet.radius_scaled, 0., 1., 1., 1.);
-	//OsuSphere(.2, 30, 30);
 	glPopMatrix();
 
-	
 	glPopMatrix();
 
 	// CREATE TEXTURED SUN
